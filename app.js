@@ -61,7 +61,7 @@ function operate(x, y, operator){
 }
 //update display 
 
-function updateDisplay(result){
+function updateDisplay(){
     if(result === null){
         return display.textContent = "0";
     }
@@ -71,48 +71,45 @@ function updateDisplay(result){
 
 const numberBtns = document.querySelectorAll('.number-btn');
 const operatorBtns = document.querySelectorAll('.operator-btn');
-// console.log(numberBtns, operatorBtns);
 const display = document.querySelector('.display');
 
-let numbers = [];
+
 let userInput =  "";
 let firstNumber;
 let secondNumber;
 let temp;
 let operator;
-
 let result=null;
 
 function clearAll(){
-    numbers = [];
-    userInput =  "";
+    userInput ="";
     firstNumber;
     secondNumber;
-    temp;
+    temp=null;
     operator = undefined;
-    result = 0;
-    updateDisplay(result)
-    
+    result = null;   
 }
 
-updateDisplay(result)
+updateDisplay()
+clearAll()
 numberBtns.forEach(number=>{
     number.addEventListener('click',(e)=>{
+        e.preventDefault()
         userInput+= e.target.innerText;
         if(number.innerText === "." && userInput.includes(".")){
             number.disabled = true;
         }
- 
         temp = parseFloat(userInput);
-        display.textContent = userInput
+        display.textContent = `${temp}`
+
+        
         if(operator!==undefined){
-            console.log(operate(firstNumber, temp, operator));
-            numbers[0] = operate(firstNumber, temp, operator);
-            console.log(display.textContent)
-            result = numbers[0]
-            // updateDisplay(result)
-            temp=null;
-            
+            temp = parseFloat(userInput);
+
+            result = operate(firstNumber, temp, operator);
+            // console.log(operate(firstNumber, temp, operator))
+            temp=result;
+            // updateDisplay()
         } 
     })
 })
@@ -120,36 +117,30 @@ numberBtns.forEach(number=>{
 operatorBtns.forEach(op=>{
     op.addEventListener('click', (e)=>{
         operator = e.target.innerText;
-        console.log(operator)
-        numbers.push(temp);
-        firstNumber = numbers[0];
-        console.log(numbers)
+        display.textContent +=`${operator}`
+        firstNumber = temp
         userInput ="";
         if(userInput === ""){
             numberBtns.forEach(n=> n.disabled = false)
         }
-        if(numbers.length<2){
-            return
-        }
-        
-        secondNumber = numbers[1];
-
-        numbers[0] = operate(firstNumber, secondNumber, operator);
-        result = numbers[0]
-        
-        updateDisplay(numbers[0])
-        numbers.splice(-1);
+        secondNumber = parseFloat(userInput)
+        // display.textContent+= firstNumber
+        result = operate(firstNumber, secondNumber, operator);
         secondNumber=null;
-        console.log(numbers)
-        
-        
+        updateDisplay()
+        if(operator==="="){
+            updateDisplay()
+        }
+        else{
+            display.textContent+= operator  
+        }
+         
     })
 })
 
 const clearBtn = document.querySelector('.clear-btn');
-console.log(clearBtn)
 
 clearBtn.addEventListener('click', ()=>{
     clearAll() 
-    updateDisplay(result)
+    updateDisplay()
 })
