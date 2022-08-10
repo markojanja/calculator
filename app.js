@@ -53,8 +53,6 @@ function operate(x, y, operator){
             return operators[operator](x, y)
         case "*":
             return operators[operator](x, y)
-        case "=":
-            return x
         default:
             return x    
     }
@@ -75,19 +73,20 @@ const display = document.querySelector('.display');
 
 
 let userInput =  "";
-let firstNumber;
+let previousNumber;
 let secondNumber;
-let temp;
+let currentNumber;
 let operator;
 let result=null;
 
 function clearAll(){
     userInput ="";
-    firstNumber;
+    previousNumber;
     secondNumber;
-    temp=null;
+    currentNumber=null;
     operator = undefined;
-    result = null;   
+    result = null;
+    numberBtns.forEach(n=> n.disabled = false)   
 }
 
 updateDisplay()
@@ -96,20 +95,29 @@ numberBtns.forEach(number=>{
     number.addEventListener('click',(e)=>{
         e.preventDefault()
         userInput+= e.target.innerText;
+        if(operator === "="){
+           userInput =""
+           userInput+= e.target.innerText;
+           previousNumber = parseFloat(userInput)
+        }
         if(number.innerText === "." && userInput.includes(".")){
             number.disabled = true;
         }
-        temp = parseFloat(userInput);
-        display.textContent = `${temp}`
-
+        
+        currentNumber = parseFloat(userInput);
+        if(currentNumber !== undefined){
+            display.textContent = `${currentNumber}`
+        }
         
         if(operator!==undefined){
-            temp = parseFloat(userInput);
-
-            result = operate(firstNumber, temp, operator);
-            // console.log(operate(firstNumber, temp, operator))
-            temp=result;
-            // updateDisplay()
+            
+            currentNumber = parseFloat(userInput);
+          
+            result = operate(previousNumber, currentNumber, operator); 
+            console.log(currentNumber)   
+            currentNumber=result;
+            
+            
         } 
     })
 })
@@ -117,24 +125,21 @@ numberBtns.forEach(number=>{
 operatorBtns.forEach(op=>{
     op.addEventListener('click', (e)=>{
         operator = e.target.innerText;
-        display.textContent +=`${operator}`
-        firstNumber = temp
+        if(operator!==undefined && currentNumber===null){
+            return display.textContent = "error";
+        }
+        previousNumber = currentNumber
         userInput ="";
         if(userInput === ""){
             numberBtns.forEach(n=> n.disabled = false)
         }
-        secondNumber = parseFloat(userInput)
-        // display.textContent+= firstNumber
-        result = operate(firstNumber, secondNumber, operator);
-        secondNumber=null;
-        updateDisplay()
-        if(operator==="="){
-            updateDisplay()
+        if(operator ==="="){
+            display.textContent = `${operator}${result}`
         }
-        else{
-            display.textContent+= operator  
-        }
-         
+        else
+        {display.textContent = `${previousNumber}${operator}`}
+
+        
     })
 })
 
