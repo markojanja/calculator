@@ -10,6 +10,17 @@ html, body{
     background: linear-gradient(to right, #00AAff, rgb(255, 69, 100));
 
 }
+.title, footer{
+    position: relative;
+    min-height: 10vh;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: aliceblue;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.3);
+}
 .calculator{
     position: relative;
     display: grid;
@@ -17,7 +28,7 @@ html, body{
     grid-template-rows: minmax(120px , auto)repeat(5 ,100px);
     justify-content: center;
     align-content: center;
-    min-height: 100vh;
+    min-height: 80vh;
 }
 .display{
     display: flex;
@@ -36,15 +47,22 @@ html, body{
 
 .number-btn, .operator-btn, .clear-btn{
     background-color: lightblue;
-    border: 1px solid lightcoral;
+    border: 1px solid #e91e63;
     outline: none;
     font-size: 2rem;
     cursor: pointer;
 }
-
 .col-2{
     grid-column: span 2;
 }
 
+@media screen and (max-width:425px) {
+    .calculator{
+        position: relative;
+        grid-template-columns: repeat(4, 60px);
+        grid-template-rows: minmax(120px , auto)repeat(5 ,60px);
+        padding: 10px;
+    }
+}
 
 
