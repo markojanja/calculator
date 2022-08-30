@@ -96,13 +96,8 @@ updateDisplay();
 clearAll();
 numberBtns.forEach((number) => {
   number.addEventListener("click", (e) => {
-    e.preventDefault();
     userInput += e.target.innerText;
-
-    if(isNaN(userInput)){
-        number.disabled = true;
-        return
-    }
+    currentNumber = parseFloat(userInput);
     if (operator === "=") {
       userInput = "";
       userInput += e.target.innerText;
@@ -111,15 +106,15 @@ numberBtns.forEach((number) => {
     if (number.innerText === "." && userInput.includes(".")) {
       number.disabled = true;
     }
-    currentNumber = parseFloat(userInput);
+
     if (currentNumber !== undefined) {
       display.textContent = `${currentNumber}`;
     }
     if (operator !== undefined) {
       currentNumber = parseFloat(userInput);
-      result = operate(previousNumber, currentNumber, operator);
+      result = operate(currentNumber,previousNumber, operator);
       if (operator === "=") {
-        return (display.textContent = `${result}`);
+        return display.textContent = `${result}`;
       }
       display.textContent = `${previousNumber}${operator}${currentNumber}`;
       currentNumber = result;
@@ -132,7 +127,7 @@ operatorBtns.forEach((op) => {
     operator = e.target.innerText;
     if (operator !== undefined && currentNumber === null) {
       clearAll();
-      return (display.textContent = "error");
+      return display.textContent = "error";
     }
     previousNumber = currentNumber;
     userInput = "";
@@ -141,7 +136,7 @@ operatorBtns.forEach((op) => {
     }
     if (operator === "=") {
       if (result === null) {
-        return (display.textContent = "error");
+        return display.textContent = "error";
       }
       display.textContent = `${operator} ${result}`;
     } else {
