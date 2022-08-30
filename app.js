@@ -7,17 +7,14 @@ function add(x, y) {
 }
 
 function subtract(x, y) {
-
   return x - y;
 }
 
 function divide(x, y) {
-
   return x / y;
 }
 
 function multiply(x, y) {
-
   return x * y;
 }
 
@@ -57,9 +54,9 @@ function operate(x, y, operator) {
 
 function updateDisplay() {
   if (result === null) {
-    return display.textContent = "0";
+    return (display.textContent = "0");
   }
-  return display.textContent = `${result}`;
+  return (display.textContent = `${result}`);
 }
 function clearAll() {
   userInput = "";
@@ -81,37 +78,30 @@ let currentNumber;
 let operator;
 let result = null;
 
-
-
 numberBtns.forEach((number) => {
   number.addEventListener("click", (e) => {
     userInput += e.target.innerText;
     currentNumber = parseFloat(userInput);
-    if(isNaN(currentNumber)) return number.disabled = true
+    if (isNaN(currentNumber)) return (number.disabled = true);
 
     if (number.innerText === "." && userInput.includes(".")) {
       number.disabled = true;
     }
-    if (operator === "=") {
-      userInput = "";
-      userInput += e.target.innerText;
-      previousNumber = parseFloat(userInput);
-    }
+    
     if (currentNumber !== undefined) {
       display.textContent = `${currentNumber}`;
     }
     if (operator !== undefined) {
       currentNumber = parseFloat(userInput);
-      result = operate(previousNumber,currentNumber, operator);
+      result = operate(previousNumber, currentNumber, operator);
       display.textContent = `${previousNumber}${operator}${currentNumber}`;
       currentNumber = result;
       if (operator === "=") {
-        clearAll()
-        userInput = ""
+        clearAll();
+        userInput = "";
         userInput += e.target.textContent;
-        currentNumber = parseFloat(userInput)
-        return display.textContent = `${currentNumber}`;
-
+        currentNumber = parseFloat(userInput);
+        return (display.textContent = `${currentNumber}`);
       }
     }
   });
@@ -124,24 +114,23 @@ operatorBtns.forEach((op) => {
     userInput = "";
     if (operator !== undefined && currentNumber === null) {
       clearAll();
-      return display.textContent = "error";
+      return (display.textContent = "error");
     }
     if (userInput === "") {
       numberBtns.forEach((n) => (n.disabled = false));
     }
     if (operator === "=") {
       if (result === null) {
-        result = previousNumber
-        return display.textContent = `${previousNumber}`;
+        result = previousNumber;
+        return (display.textContent = `${previousNumber}`);
       }
-      if(result===Infinity){
-        clearAll()
-        return display.textContent = "error";
+      if (result === Infinity) {
+        clearAll();
+        return (display.textContent = "error");
       }
-      console.log(previousNumber, currentNumber, result)
+      console.log(previousNumber, currentNumber, result);
       display.textContent = `${operator} ${result}`;
-    } 
-    else {
+    } else {
       display.textContent = `${previousNumber}${operator}`;
     }
   });
