@@ -32,7 +32,6 @@ const operators = {
   "*": multiply,
   "^": power,
 };
-
 // operate numbers
 function operate(x, y, operator) {
   switch (operator) {
@@ -50,12 +49,33 @@ function operate(x, y, operator) {
       return x;
   }
 }
+//display error
+function displayError() {
+  return (display.textContent = "ERROR");
+}
 //update display
-
-function updateDisplay() {
+function updateDisplayContent() {
+  if (currentNumber) {
+    display.textContent = `${currentNumber}`;
+  }
+  if (operator) {
+    if (result === null) {
+      display.textContent = `${previousNumber}`;
+    }
+    if (operator !== "=") {
+      display.textContent = `${previousNumber}${operator}${currentNumber}`;
+    }
+    if (operator === "=") {
+      display.textContent = `${operator} ${result}`;
+    }
+  }
+}
+//set display
+function setDisplay() {
   if (result === null) {
     return (display.textContent = "0");
   }
+
   return (display.textContent = `${result}`);
 }
 function clearAll() {
@@ -73,8 +93,8 @@ const display = document.querySelector(".display");
 const clearBtn = document.querySelector(".clear-btn");
 
 let userInput = "";
-let previousNumber;
-let currentNumber;
+let previousNumber = null;
+let currentNumber = null;
 let operator;
 let result = null;
 
@@ -84,24 +104,23 @@ numberBtns.forEach((number) => {
     currentNumber = parseFloat(userInput);
     if (isNaN(currentNumber)) return (number.disabled = true);
 
-    if (number.innerText === "." && userInput.includes(".")) {
-      number.disabled = true;
-    }
-    
+    if (number.innerText === "." && userInput.includes("."))
+      return (number.disabled = true);
+
     if (currentNumber !== undefined) {
-      display.textContent = `${currentNumber}`;
+      updateDisplayContent();
     }
     if (operator !== undefined) {
       currentNumber = parseFloat(userInput);
       result = operate(previousNumber, currentNumber, operator);
-      display.textContent = `${previousNumber}${operator}${currentNumber}`;
+      updateDisplayContent();
       currentNumber = result;
       if (operator === "=") {
         clearAll();
         userInput = "";
         userInput += e.target.textContent;
         currentNumber = parseFloat(userInput);
-        return (display.textContent = `${currentNumber}`);
+        updateDisplayContent();
       }
     }
   });
@@ -114,7 +133,7 @@ operatorBtns.forEach((op) => {
     userInput = "";
     if (operator !== undefined && currentNumber === null) {
       clearAll();
-      return (display.textContent = "error");
+      return displayError();
     }
     if (userInput === "") {
       numberBtns.forEach((n) => (n.disabled = false));
@@ -122,21 +141,20 @@ operatorBtns.forEach((op) => {
     if (operator === "=") {
       if (result === null) {
         result = previousNumber;
-        return (display.textContent = `${previousNumber}`);
+        return updateDisplayContent();
       }
       if (result === Infinity) {
         clearAll();
-        return (display.textContent = "error");
+        return displayError();
       }
-      console.log(previousNumber, currentNumber, result);
-      display.textContent = `${operator} ${result}`;
+      // console.log(previousNumber, currentNumber, result);
+      updateDisplayContent();
     } else {
       display.textContent = `${previousNumber}${operator}`;
     }
   });
 });
-
 clearBtn.addEventListener("click", () => {
   clearAll();
-  updateDisplay();
+  setDisplay();
 });
