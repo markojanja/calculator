@@ -7,7 +7,7 @@
 }
 html, body{
     font-family: sans-serif;
-    background: linear-gradient(to right, #00AAff, rgb(255, 69, 100));
+    background: linear-gradient(to right, rgb(33, 32, 32), rgb(106, 69, 255));
 
 }
 .title, footer{
@@ -29,6 +29,7 @@ html, body{
     justify-content: center;
     align-content: center;
     min-height: 80vh;
+    
 }
 .display{
     display: flex;
@@ -46,8 +47,9 @@ html, body{
 }
 
 .number-btn, .operator-btn, .clear-btn{
-    background-color: lightblue;
-    border: 1px solid #e91e63;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid  rgb(106, 69, 255);
+    color:  rgb(106, 69, 255);
     outline: none;
     font-size: 2rem;
     cursor: pointer;

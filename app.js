@@ -1,5 +1,4 @@
 "use strict";
-
 // Math functions
 
 function add(x, y) {
